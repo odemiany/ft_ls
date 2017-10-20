@@ -18,12 +18,20 @@
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
-typedef struct	s_ls_struct
+typedef struct		s_files
 {
-	char	*flags;
+	char			*file;
+	struct s_files	*next;
+}					t_files;
+typedef struct		s_ls_struct
+{
+	char			*flags;
+	t_files			*unsorted;
+
 }				t_ls_struct;
 void	ft_ls(int av, char **ac);
 void	parse_params(int av, char **ac, t_ls_struct *s_info);
 int		check_flag(char *str);
 void	add_to_flags(char *str, t_ls_struct *s_info);
+void	add_to_files(char *str, t_ls_struct *s_info);
 #endif

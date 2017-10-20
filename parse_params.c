@@ -16,11 +16,7 @@ void	parse_params(int ac, char **av, t_ls_struct *s_info)
 {
 	int	i;
 
-	if (ac == 1)
-	{
-		/*add "." to files*/
-		return ;
-	}
+	s_info->unsorted = NULL;
 	i = 1;
 	while (i < ac && check_flag(av[i]) == FLAG)
 	{
@@ -29,9 +25,11 @@ void	parse_params(int ac, char **av, t_ls_struct *s_info)
 	}
 	if (i < ac && check_flag(av[i]) == DELIMITER)
 		i++;
+	if (i == ac)
+		add_to_files(".", s_info);
 	while (i < ac)
 	{
-		//add_to_files(av[i]);
+		add_to_files(av[i], s_info);
 		i++;
 	}
 }
@@ -54,4 +52,24 @@ void	add_to_flags(char *str, t_ls_struct *s_info)
 	s_info->flags = ft_strjoin(s_info->flags, (str + 1));
 	if (*ptr_cp)
 		free(ptr_cp);
+}
+
+void	add_to_files(char *str, t_ls_struct *s_info)
+{
+	t_files	*tmp;
+
+	if (s_info->unsorted == NULL)
+	{
+		s_info->unsorted = (t_files *) malloc(sizeof(t_files));
+		s_info->unsorted->next = NULL;
+		s_info->unsorted->file = str;
+		return ;
+	}
+	tmp = s_info->unsorted;
+	while (tmp->next != NULL)
+		tmp = tmp->next;
+	tmp->next = (t_files *)malloc(sizeof(t_files));
+	tmp = tmp->next;
+	tmp->next = NULL;
+	tmp->file = str;
 }

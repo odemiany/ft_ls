@@ -13,8 +13,17 @@
 
 void	self_check(t_ls_struct *s_info)
 {
-	printf("%s\n", s_info->flags);
-	sleep(100);
+	t_files	*tmp;
+
+	printf("flags:\n%s\nfiles:\n", s_info->flags);
+	tmp = s_info->unsorted;
+
+	while (tmp != NULL)
+	{
+		printf("%s\n", tmp->file);
+		tmp = tmp->next;
+	}
+	//sleep(100);
 }
 
 int main(int ac, char **av)
