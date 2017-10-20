@@ -1,43 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   check_flags.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/19 16:20:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/19 16:20:00 by odemiany         ###   ########.fr       */
+/*   Created: 2017/10/20 18:14:00 by odemiany          #+#    #+#             */
+/*   Updated: 2017/10/20 18:14:00 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "ft_ls.h"
 
-void	self_check(t_ls_struct *s_info)
+void	check_flags(t_ls_struct *s_info)
 {
-	t_files	*tmp;
+	size_t	i;
 
-	printf("flags:\n%s\nfiles:\n", s_info->flags);
-	tmp = s_info->unsorted;
-
-	while (tmp != NULL)
+	i = 0;
+	while (i < ft_strlen(s_info->flags))
 	{
-		printf("%s\n", tmp->file);
-		tmp = tmp->next;
+		if (ft_strchr(ALLOWED_FLAGS, (s_info->flags)[i]) == NULL)
+		{
+			ft_putstr("ls: illegal option -- ");
+			ft_putchar((s_info->flags)[i]);
+			ft_putstr("\n");
+			print_usage();
+		}
+		i++;
 	}
-	//sleep(100);
 }
-
-int main(int ac, char **av)
+void	print_usage(void)
 {
-	ft_ls(ac, av);
-	return 0;
-}
+	char *flags;
 
-void 	ft_ls(int av, char **ac)
-{
-	t_ls_struct		s_info;
-
-	s_info.flags = "\0";
-	parse_params(av, ac, &s_info);
-	check_flags(&s_info);
-	self_check(&s_info);
+	flags = ALLOWED_FLAGS;
+	ft_putstr("usage: ls [-");
+	ft_putstr(flags);
+	ft_putstr("] [file ...]\n");
+	exit(1);
 }
