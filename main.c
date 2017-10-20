@@ -11,6 +11,12 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 
+void	self_check(t_ls_struct *s_info)
+{
+	printf("%s\n", s_info->flags);
+	sleep(100);
+}
+
 int main(int ac, char **av)
 {
 	ft_ls(ac, av);
@@ -21,5 +27,7 @@ void 	ft_ls(int av, char **ac)
 {
 	t_ls_struct		s_info;
 
+	s_info.flags = "\0";
 	parse_params(av, ac, &s_info);
+	self_check(&s_info);
 }
