@@ -15,6 +15,8 @@
 # include "libft.h"
 # include <stdio.h>
 # include <stdlib.h>
+# include <dirent.h>
+# include <errno.h>
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
@@ -46,4 +48,6 @@ void				print_usage(void);
 void				sort_input_files(t_ls_struct *s_info);
 t_files				*find_min_between(t_files *start, t_files *finish);
 void				move_to_end(t_files *min, t_files *unsorted);
+void				split_dir_and_not_dir(t_ls_struct *s_info);
+int					is_dir(char *filename);
 #endif
