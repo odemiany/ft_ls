@@ -3,7 +3,7 @@ project(ft_ls)
 
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra")
-set(SOURCE_FILES main.c parse_params.c check_flags.c)
+set(SOURCE_FILES main.c parse_params.c check_flags.c sorting.c)
 
 include_directories(libft/includes)
 

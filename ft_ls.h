@@ -19,10 +19,14 @@
 # define NOT_FLAG -1
 # define DELIMITER 2
 # define ALLOWED_FLAGS "ailRt"
+# define LEXICOGRAPHIC 0
+# define REVERSE 1
+# define BY_TIME 2
 
 typedef struct		s_files
 {
 	char			*file;
+	struct s_files	*prev;
 	struct s_files	*next;
 }					t_files;
 
@@ -39,4 +43,7 @@ void				add_to_flags(char *str, t_ls_struct *s_info);
 void				add_to_files(char *str, t_ls_struct *s_info);
 void				check_flags(t_ls_struct *s_info);
 void				print_usage(void);
+void				sort_input_files(t_ls_struct *s_info);
+t_files				*find_min_between(t_files *start, t_files *finish);
+void				move_to_end(t_files *min, t_files *unsorted);
 #endif

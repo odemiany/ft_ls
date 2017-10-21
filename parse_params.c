@@ -61,6 +61,7 @@ void	add_to_files(char *str, t_ls_struct *s_info)
 	if (s_info->unsorted == NULL)
 	{
 		s_info->unsorted = (t_files *) malloc(sizeof(t_files));
+		s_info->unsorted->prev = NULL;
 		s_info->unsorted->next = NULL;
 		s_info->unsorted->file = str;
 		return ;
@@ -69,7 +70,7 @@ void	add_to_files(char *str, t_ls_struct *s_info)
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = (t_files *)malloc(sizeof(t_files));
-	tmp = tmp->next;
-	tmp->next = NULL;
-	tmp->file = str;
+	tmp->next->prev = tmp;
+	tmp->next->next = NULL;
+	tmp->next->file = str;
 }
