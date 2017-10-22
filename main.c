@@ -69,5 +69,7 @@ void 	ft_ls(int av, char **ac)
 	check_flags(&s_info);
 	sort_list(s_info.unsorted, LEXICOGRAPHIC, &(s_info.unsorted));
 	split_dir_and_not_dir(&s_info);
-	self_check(&s_info);
+	operate_not_dir(&s_info);
+	operate_dir(&s_info);
+	//self_check(&s_info);
 }

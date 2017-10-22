@@ -54,7 +54,7 @@ t_files	*lex_min(t_files *start, t_files *finish)
 			min = start;
 		start = start->next;
 	}
-	if (strcmp(min->file, start->file) > 0)
+	if (ft_strcmp(min->file, start->file) > 0)
 		min = start;
 	return (min);
 }
@@ -68,11 +68,11 @@ t_files	*time_min(t_files *start, t_files *finish)
 	min = start;
 	while (start != finish)
 	{
-		if (strcmp(min->file, start->file) > 0)
+		if (ft_strcmp(min->file, start->file) > 0)
 			min = start;
 		start = start->next;
 	}
-	if (strcmp(min->file, start->file) > 0)
+	if (ft_strcmp(min->file, start->file) > 0)
 		min = start;
 	return (min);
 }

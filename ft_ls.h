@@ -61,4 +61,11 @@ void				ret_ptr_to_head(t_files *list, t_files **list_ptr);
 t_files				*find_last_elem(t_files *list);
 void				reverse_list(t_files *list, t_files **list_ptr);
 void				sort_input_params(t_ls_struct *s_info);
+void				operate_dir(t_ls_struct *s_info);
+void				operate_not_dir(t_ls_struct *s_info);
+void				get_extend_data(t_files *list);
+void				print_extend_data(t_files *list);
+size_t 				count_elem(t_files *list);
+void				check_count(size_t i, char *str);
+void				print_extend_folder(t_files *file);
 #endif
