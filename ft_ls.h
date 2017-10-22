@@ -36,6 +36,8 @@ typedef struct		s_ls_struct
 {
 	char			*flags;
 	t_files			*unsorted;
+	t_files			*dir;
+	t_files			*not_dir;
 }					t_ls_struct;
 
 void				ft_ls(int av, char **ac);
@@ -45,9 +47,14 @@ void				add_to_flags(char *str, t_ls_struct *s_info);
 void				add_to_files(char *str, t_ls_struct *s_info);
 void				check_flags(t_ls_struct *s_info);
 void				print_usage(void);
-void				sort_input_files(t_ls_struct *s_info);
+//void				sort_input_files(t_ls_struct *s_info);
+void				sort_input_files(t_files *list);
 t_files				*find_min_between(t_files *start, t_files *finish);
 void				move_to_end(t_files *min, t_files *unsorted);
 void				split_dir_and_not_dir(t_ls_struct *s_info);
 int					is_dir(char *filename);
+void				add_to_files(char *str, t_ls_struct *s_info);
+void				add_to_dir(char *str, t_ls_struct *s_info);
+void				add_to_not_dir(char *str, t_ls_struct *s_info);
+void				free_list(t_files *list);
 #endif

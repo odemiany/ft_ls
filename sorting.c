@@ -12,17 +12,17 @@
 
 #include "ft_ls.h"
 
-void	sort_input_files(t_ls_struct *s_info)
+void	sort_input_files(t_files *list)
 {
 	t_files *start;
 	t_files *finish;
 	t_files *min;
 
-	start = s_info->unsorted;
+	start = list;
 	while (start->next != NULL)
 		start = start->next;
 	finish = start;
-	start = s_info->unsorted;
+	start = list;
 	while (start != finish)
 	{
 		min = find_min_between(start, finish);
@@ -30,11 +30,11 @@ void	sort_input_files(t_ls_struct *s_info)
 			start = start->next;
 		if (finish == min)
 			finish = finish->prev;
-		move_to_end(min, s_info->unsorted);
+		move_to_end(min, list);
 	}
-	move_to_end(start, s_info->unsorted);
-	while (s_info->unsorted->prev != NULL)
-		s_info->unsorted = s_info->unsorted->prev;
+	move_to_end(start, list);
+	while (list->prev != NULL)
+		list = list->prev;
 }
 
 t_files	*find_min_between(t_files *start, t_files *finish)
