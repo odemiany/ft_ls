@@ -29,7 +29,8 @@ void	split_dir_and_not_dir(t_ls_struct *s_info)
 			add_to_not_dir(ptr->file, s_info);
 		ptr = ptr->next;
 	}
-	//free_list(s_info->unsorted);
+	sort_input_params(s_info);
+	free_list(s_info->unsorted);
 }
 
 int		is_dir(char *filename)
@@ -101,18 +102,16 @@ void	add_to_not_dir(char *str, t_ls_struct *s_info)
 	tmp->next->file = str;
 }
 
-void	free_list(t_files *list)
+void	sort_input_params(t_ls_struct *s_info)
 {
-	t_files *tmp;
-
-	if (list != NULL)
+	if (ft_strchr(s_info->flags, 't') != NULL)
 	{
-		while (list != NULL)
-		{
-			tmp = list->next;
-			if (list)
-				free(list);
-			list = tmp;
-		}
+		sort_list(s_info->dir, BY_TIME, &(s_info->dir));
+		sort_list(s_info->not_dir, BY_TIME, &(s_info->not_dir));
+	}
+	if (ft_strchr(s_info->flags, 'r') != NULL)
+	{
+		sort_list(s_info->dir, REVERSE, &(s_info->dir));
+		sort_list(s_info->not_dir, REVERSE, &(s_info->not_dir));
 	}
 }

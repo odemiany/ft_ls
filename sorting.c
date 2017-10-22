@@ -12,35 +12,59 @@
 
 #include "ft_ls.h"
 
-void	sort_input_files(t_files *list)
+void	sort_list(t_files *list, int type, t_files **list_ptr)
 {
 	t_files *start;
 	t_files *finish;
 	t_files *min;
 
+	if (list == NULL || list_ptr == NULL || type < 0 || type > 2)
+		return ;
 	start = list;
-	while (start->next != NULL)
-		start = start->next;
-	finish = start;
-	start = list;
+	finish = find_last_elem(list);
+	if (type == REVERSE)
+	{
+		reverse_list(start, list_ptr);
+		return ;
+	}
 	while (start != finish)
 	{
-		min = find_min_between(start, finish);
-		if (start == min)
-			start = start->next;
-		if (finish == min)
-			finish = finish->prev;
+		if (type == LEXICOGRAPHIC)
+			min = lex_min(start, finish);
+		else
+			min = time_min(start, finish);
+		start = (start == min) ? start->next : start;
+		finish = (finish == min) ? finish->prev : finish;
 		move_to_end(min, list);
 	}
 	move_to_end(start, list);
-	while (list->prev != NULL)
-		list = list->prev;
+	ret_ptr_to_head(list, list_ptr);
 }
 
-t_files	*find_min_between(t_files *start, t_files *finish)
+t_files	*lex_min(t_files *start, t_files *finish)
 {
 	t_files *min;
 
+	if (start == NULL || finish == NULL)
+		return (NULL);
+	min = start;
+	while (start != finish)
+	{
+		if (ft_strcmp(min->file, start->file) > 0)
+			min = start;
+		start = start->next;
+	}
+	if (strcmp(min->file, start->file) > 0)
+		min = start;
+	return (min);
+}
+
+t_files	*time_min(t_files *start, t_files *finish)
+{
+	t_files *min;
+
+	if (start == NULL || finish == NULL)
+		return (NULL);
 	min = start;
 	while (start != finish)
 	{
@@ -55,16 +79,37 @@ t_files	*find_min_between(t_files *start, t_files *finish)
 
 void	move_to_end(t_files *min, t_files *unsorted)
 {
-	while (unsorted->next != NULL)
-		unsorted = unsorted->next;
-	if (min->prev != NULL && min->next != NULL)
-		min->prev->next = min->next;
-	if (min->next != NULL)
-		min->next->prev = min->prev;
-	if (min != unsorted)
+	if (unsorted != NULL && min != NULL)
 	{
-		unsorted->next = min;
-		min->next = NULL;
-		min->prev = unsorted;
+		while (unsorted->next != NULL)
+			unsorted = unsorted->next;
+		if (min->prev != NULL && min->next != NULL)
+			min->prev->next = min->next;
+		if (min->next != NULL)
+			min->next->prev = min->prev;
+		if (min != unsorted)
+		{
+			unsorted->next = min;
+			min->next = NULL;
+			min->prev = unsorted;
+		}
 	}
+}
+
+void	reverse_list(t_files *list, t_files **list_ptr)
+{
+	t_files *list_cp;
+	t_files *tmp;
+
+	if (list == NULL || list_ptr == NULL)
+		return ;
+	list_cp = list;
+		while (list_cp != NULL)
+		{
+			tmp = list_cp->prev;
+			list_cp->prev = list_cp->next;
+			list_cp->next = tmp;
+			list_cp = list_cp->prev;
+		}
+	ret_ptr_to_head(list, list_ptr);
 }

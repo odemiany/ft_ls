@@ -15,42 +15,42 @@
 void	self_check(t_ls_struct *s_info)
 {
 	t_files	*tmp;
-	//t_files	*tmp2;
+	t_files	*tmp2;
 
-	tmp = s_info->unsorted;
+//	tmp = s_info->unsorted;
+//	while (tmp != NULL)
+//	{
+//		printf("%s\n", tmp->file);
+//		tmp = tmp->next;
+//	}
+	printf("NOT_DIR:\n");
+	tmp = s_info->not_dir;
+	tmp2 = NULL;
 	while (tmp != NULL)
 	{
 		printf("%s\n", tmp->file);
+		tmp2 = tmp;
 		tmp = tmp->next;
 	}
-//	printf("NOT_DIR:\n");
-//	tmp = s_info->not_dir;
-//	tmp2 = NULL;
-//	while (tmp != NULL)
-//	{
-//		printf("%s\n", tmp->file);
-//		tmp2 = tmp;
-//		tmp = tmp->next;
-//	}
-//	while(tmp2 != NULL)
-//	{
-//		printf("%s\n", tmp2->file);
-//		tmp2 = tmp2->prev;
-//	}
-//	printf("DIR:\n");
-//	tmp = s_info->dir;
-//	tmp2 = NULL;
-//	while (tmp != NULL)
-//	{
-//		printf("%s\n", tmp->file);
-//		tmp2 = tmp;
-//		tmp = tmp->next;
-//	}
-//	while(tmp2 != NULL)
-//	{
-//		printf("%s\n", tmp2->file);
-//		tmp2 = tmp2->prev;
-//	}
+	while(tmp2 != NULL)
+	{
+		printf("%s\n", tmp2->file);
+		tmp2 = tmp2->prev;
+	}
+	printf("DIR:\n");
+	tmp = s_info->dir;
+	tmp2 = NULL;
+	while (tmp != NULL)
+	{
+		printf("%s\n", tmp->file);
+		tmp2 = tmp;
+		tmp = tmp->next;
+	}
+	while(tmp2 != NULL)
+	{
+		printf("%s\n", tmp2->file);
+		tmp2 = tmp2->prev;
+	}
 	//sleep(100);
 }
 
@@ -67,7 +67,7 @@ void 	ft_ls(int av, char **ac)
 	s_info.flags = "\0";
 	parse_params(av, ac, &s_info);
 	check_flags(&s_info);
-	sort_input_files(s_info.unsorted);
+	sort_list(s_info.unsorted, LEXICOGRAPHIC, &(s_info.unsorted));
 	split_dir_and_not_dir(&s_info);
 	self_check(&s_info);
 }

@@ -20,7 +20,7 @@
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
-# define ALLOWED_FLAGS "ailRt"
+# define ALLOWED_FLAGS "alrRt"
 # define LEXICOGRAPHIC 0
 # define REVERSE 1
 # define BY_TIME 2
@@ -47,9 +47,9 @@ void				add_to_flags(char *str, t_ls_struct *s_info);
 void				add_to_files(char *str, t_ls_struct *s_info);
 void				check_flags(t_ls_struct *s_info);
 void				print_usage(void);
-//void				sort_input_files(t_ls_struct *s_info);
-void				sort_input_files(t_files *list);
-t_files				*find_min_between(t_files *start, t_files *finish);
+void				sort_list(t_files *list, int type, t_files **list_ptr);
+t_files				*lex_min(t_files *start, t_files *finish);
+t_files				*time_min(t_files *start, t_files *finish);
 void				move_to_end(t_files *min, t_files *unsorted);
 void				split_dir_and_not_dir(t_ls_struct *s_info);
 int					is_dir(char *filename);
@@ -57,4 +57,8 @@ void				add_to_files(char *str, t_ls_struct *s_info);
 void				add_to_dir(char *str, t_ls_struct *s_info);
 void				add_to_not_dir(char *str, t_ls_struct *s_info);
 void				free_list(t_files *list);
+void				ret_ptr_to_head(t_files *list, t_files **list_ptr);
+t_files				*find_last_elem(t_files *list);
+void				reverse_list(t_files *list, t_files **list_ptr);
+void				sort_input_params(t_ls_struct *s_info);
 #endif
