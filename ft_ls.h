@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <dirent.h>
 # include <errno.h>
+# include <string.h>
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
@@ -24,6 +25,8 @@
 # define LEXICOGRAPHIC 0
 # define REVERSE 1
 # define BY_TIME 2
+
+typedef struct		dirent t_dirent;
 
 typedef struct		s_files
 {
@@ -53,7 +56,6 @@ t_files				*time_min(t_files *start, t_files *finish);
 void				move_to_end(t_files *min, t_files *unsorted);
 void				split_dir_and_not_dir(t_ls_struct *s_info);
 int					is_dir(char *filename);
-void				add_to_files(char *str, t_ls_struct *s_info);
 void				add_to_dir(char *str, t_ls_struct *s_info);
 void				add_to_not_dir(char *str, t_ls_struct *s_info);
 void				free_list(t_files *list);
@@ -67,5 +69,10 @@ void				get_extend_data(t_files *list);
 void				print_extend_data(t_files *list);
 size_t 				count_elem(t_files *list);
 void				check_count(size_t i, char *str);
+void				apply_sorting(char *flags, t_files *file, t_files **file_ptr);
+void				read_folder(char *folder, t_files **file, char *flags);
+void				print_simple_folder(t_files *file);
 void				print_extend_folder(t_files *file);
+void 				add_to_list(char *str, t_files *file, t_files **file_ptr);
+void				err_mgmt(char *str);
 #endif

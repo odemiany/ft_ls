@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void	operate_not_dir(t_ls_struct *s_info)
+void	operate_dir(t_ls_struct *s_info)
 {
 	t_files	*list;
 	t_files	*file;
@@ -27,31 +27,24 @@ void	operate_not_dir(t_ls_struct *s_info)
 	{
 		check_count(elem_count, list->file);
 		read_folder(list->file, &file, s_info->flags);
-		if (ft_strchr(s_info->flags, 'i') != NULL)
-			sort_list(file, BY_TIME, &file);
-		else
-			sort_list(file, LEXICOGRAPHIC, &file);
-		if (ft_strchr(s_info->flags, 'r') != NULL)
-			sort_list(file, REVERSE, &file);
+		apply_sorting(s_info->flags, file, &file);
 		if (ft_strchr(s_info->flags, 'l') == NULL)
-			ft_putendl(list->file);
+			print_simple_folder(file);
 		else
-			//print_extend_folder(file);
+			print_extend_folder(file);
 		list = list->next;
+		free_list(file);
 	}
 }
 
-size_t	count_elem(t_files *list)
+void	apply_sorting(char *flags, t_files *file, t_files **file_ptr)
 {
-	size_t i;
-
-	i = 0;
-	while (list != NULL)
-	{
-		i++;
-		list = list->next;
-	}
-	return (i);
+	if (ft_strchr(flags, 'i') != NULL)
+		sort_list(file, BY_TIME, file_ptr);
+	else
+		sort_list(file, LEXICOGRAPHIC, file_ptr);
+	if (ft_strchr(flags, 'r') != NULL)
+		sort_list(file, REVERSE, file_ptr);
 }
 
 void	check_count(size_t i, char *str)
@@ -63,11 +56,30 @@ void	check_count(size_t i, char *str)
 	}
 }
 
-void	read_folder(char *folder, t_list **file, char *flags)
+void	read_folder(char *folder, t_files **file, char *flags)
 {
-	DIR *dir;
+	DIR 		*dir;
+	t_dirent	*ent;
 
 	dir = opendir(folder);
 	if (dir == NULL)
-		return NULL;
+	{
+		err_mgmt(folder);
+		return ;
+	}
+	while ((ent = readdir(dir)) != NULL)
+	{
+		if (ft_strchr(flags, 'a') != NULL && ent->d_name[0] == '.')
+		add_to_list(ent->d_name, *file, file);
+	}
+	if (ft_strchr(flags, 'l') != NULL)
+		write(1, "", 1);
+		//get_extend_data(*file);
+	closedir (dir);
+}
+
+void	err_mgmt(char *str)
+{
+	ft_putstr("ls: ");
+	perror(str);
 }

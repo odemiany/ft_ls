@@ -46,3 +46,36 @@ void	free_list(t_files *list)
 		}
 	}
 }
+
+size_t	count_elem(t_files *list)
+{
+	size_t i;
+
+	i = 0;
+	while (list != NULL)
+	{
+		i++;
+		list = list->next;
+	}
+	return (i);
+}
+
+void 	add_to_list(char *str, t_files *file, t_files **file_ptr)
+{
+	if (!str || !file_ptr)
+		return ;
+	if (*file_ptr == NULL)
+	{
+		*file_ptr = (t_files *)malloc(sizeof(t_files));
+		(*file_ptr)->next = NULL;
+		(*file_ptr)->prev = NULL;
+		(*file_ptr)->file = str;
+		return ;
+	}
+	while (file->next != NULL)
+		file = file->next;
+	file->next = (t_files *)malloc(sizeof(t_files));
+	file->next->next = NULL;
+	file->next->prev = file;
+	file->next->file = str;
+}
