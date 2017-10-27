@@ -18,6 +18,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include <string.h>
+# include <sys/stat.h>
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
@@ -38,6 +39,8 @@ typedef struct		s_files
 typedef struct		s_ls_struct
 {
 	char			*flags;
+	int 			not_dir_exists;
+	int 			n_flag;
 	t_files			*unsorted;
 	t_files			*dir;
 	t_files			*not_dir;
@@ -66,13 +69,17 @@ void				sort_input_params(t_ls_struct *s_info);
 void				operate_dir(t_ls_struct *s_info);
 void				operate_not_dir(t_ls_struct *s_info);
 void				get_extend_data(t_files *list);
+void 				print_folder(t_files *file, t_ls_struct *s_info);
 void				print_extend_data(t_files *list);
 size_t 				count_elem(t_files *list);
-void				check_count(size_t i, char *str);
+int					count_flag(int file_exists, size_t elem_count);
+void				write_fold_name(char *str);
 void				apply_sorting(char *flags, t_files *file, t_files **file_ptr);
 void				read_folder(char *folder, t_files **file, char *flags);
 void				print_simple_folder(t_files *file);
 void				print_extend_folder(t_files *file);
 void 				add_to_list(char *str, t_files *file, t_files **file_ptr);
 void				err_mgmt(char *str);
+void				recursion(char *str, t_ls_struct *s_info);
+char 				*make_next_name(char *fold_name, char *file_name);
 #endif

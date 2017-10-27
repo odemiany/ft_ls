@@ -41,6 +41,7 @@ void	free_list(t_files *list)
 		while (list != NULL)
 		{
 			tmp = list->next;
+			free(list->file);
 			free(list);
 			list = tmp;
 		}
@@ -69,7 +70,7 @@ void 	add_to_list(char *str, t_files *file, t_files **file_ptr)
 		*file_ptr = (t_files *)malloc(sizeof(t_files));
 		(*file_ptr)->next = NULL;
 		(*file_ptr)->prev = NULL;
-		(*file_ptr)->file = str;
+		(*file_ptr)->file = ft_strdup(str);
 		return ;
 	}
 	while (file->next != NULL)
@@ -77,5 +78,5 @@ void 	add_to_list(char *str, t_files *file, t_files **file_ptr)
 	file->next = (t_files *)malloc(sizeof(t_files));
 	file->next->next = NULL;
 	file->next->prev = file;
-	file->next->file = str;
+	file->next->file = ft_strdup(str);
 }

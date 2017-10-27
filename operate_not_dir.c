@@ -18,7 +18,11 @@ void	operate_not_dir(t_ls_struct *s_info)
 
 	list = s_info->not_dir;
 	if (list == NULL)
-		return ;
+	{
+		s_info->not_dir_exists = 0;
+		return;
+	}
+	s_info->not_dir_exists = 1;
 	while (list != NULL)
 	{
 		if (ft_strchr(s_info->flags, 'l') == NULL)
@@ -33,5 +37,7 @@ void	operate_not_dir(t_ls_struct *s_info)
 		list = list->next;
 	}
 	free_list(s_info->not_dir);
+
+	s_info->dir == NULL ? 0 : write(1, "\n", 1);
 }
 

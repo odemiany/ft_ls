@@ -35,28 +35,21 @@ void	split_dir_and_not_dir(t_ls_struct *s_info)
 
 int		is_dir(char *filename)
 {
-	DIR *dir;
+	DIR				*dir;
+	struct stat		buf;
 
 	dir = opendir(filename);
 	if (dir != NULL)
 	{
 		closedir(dir);
+		lstat(filename, &buf);
+		if (S_ISLNK(buf.st_mode) != 0)
+			return (0);
 		return (1);
 	}
 	if (errno == ENOTDIR)
 		return (0);
-	else if (errno == ENOENT)
-	{
-		ft_putstr("ls: ");
-		ft_putstr(filename);
-		ft_putstr(": No such file or directory\n");
-	}
-	else if (errno == EACCES)
-	{
-		ft_putstr("ls: ");
-		ft_putstr(filename);
-		ft_putstr(": Permission denied\n");
-	}
+	err_mgmt(filename);
 	return (-1);
 }
 
@@ -69,7 +62,7 @@ void	add_to_dir(char *str, t_ls_struct *s_info)
 		s_info->dir = (t_files *) malloc(sizeof(t_files));
 		s_info->dir->prev = NULL;
 		s_info->dir->next = NULL;
-		s_info->dir->file = str;
+		s_info->dir->file = ft_strdup(str);
 		return ;
 	}
 	tmp = s_info->dir;
@@ -78,7 +71,7 @@ void	add_to_dir(char *str, t_ls_struct *s_info)
 	tmp->next = (t_files *)malloc(sizeof(t_files));
 	tmp->next->prev = tmp;
 	tmp->next->next = NULL;
-	tmp->next->file = str;
+	tmp->next->file = ft_strdup(str);
 }
 
 void	add_to_not_dir(char *str, t_ls_struct *s_info)
@@ -90,7 +83,7 @@ void	add_to_not_dir(char *str, t_ls_struct *s_info)
 		s_info->not_dir = (t_files *) malloc(sizeof(t_files));
 		s_info->not_dir->prev = NULL;
 		s_info->not_dir->next = NULL;
-		s_info->not_dir->file = str;
+		s_info->not_dir->file = ft_strdup(str);
 		return ;
 	}
 	tmp = s_info->not_dir;
@@ -99,7 +92,7 @@ void	add_to_not_dir(char *str, t_ls_struct *s_info)
 	tmp->next = (t_files *)malloc(sizeof(t_files));
 	tmp->next->prev = tmp;
 	tmp->next->next = NULL;
-	tmp->next->file = str;
+	tmp->next->file = ft_strdup(str);
 }
 
 void	sort_input_params(t_ls_struct *s_info)

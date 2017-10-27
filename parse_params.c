@@ -63,7 +63,7 @@ void	add_to_files(char *str, t_ls_struct *s_info)
 		s_info->unsorted = (t_files *)malloc(sizeof(t_files));
 		s_info->unsorted->prev = NULL;
 		s_info->unsorted->next = NULL;
-		s_info->unsorted->file = str;
+		s_info->unsorted->file = ft_strdup(str);
 		return ;
 	}
 	tmp = s_info->unsorted;
@@ -72,5 +72,5 @@ void	add_to_files(char *str, t_ls_struct *s_info)
 	tmp->next = (t_files *)malloc(sizeof(t_files));
 	tmp->next->prev = tmp;
 	tmp->next->next = NULL;
-	tmp->next->file = str;
+	tmp->next->file = ft_strdup(str);
 }

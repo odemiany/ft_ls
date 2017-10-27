@@ -71,5 +71,6 @@ void 	ft_ls(int av, char **ac)
 	split_dir_and_not_dir(&s_info);
 	operate_not_dir(&s_info);
 	operate_dir(&s_info);
+	while (42);
 	//self_check(&s_info);
 }
