@@ -29,6 +29,7 @@ void	check_flags(t_ls_struct *s_info)
 		i++;
 	}
 }
+
 void	print_usage(void)
 {
 	char *flags;

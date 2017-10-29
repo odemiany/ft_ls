@@ -14,8 +14,9 @@
 
 void	split_dir_and_not_dir(t_ls_struct *s_info)
 {
-	t_files *ptr;
-	int ret;
+	t_files			*ptr;
+	int				ret;
+	struct stat		buf;
 
 	s_info->not_dir = NULL;
 	s_info->dir = NULL;
@@ -26,7 +27,12 @@ void	split_dir_and_not_dir(t_ls_struct *s_info)
 		if (ret == 1)
 			add_to_dir(ptr->file, s_info);
 		else if (ret == 0)
+		{
+			if (S_ISLNK(buf.st_mode) != 0 &&
+										ft_strchr(s_info->flags, 'l') == NULL)
+				add_to_dir(ptr->file, s_info);
 			add_to_not_dir(ptr->file, s_info);
+		}
 		ptr = ptr->next;
 	}
 	sort_input_params(s_info);
@@ -59,7 +65,7 @@ void	add_to_dir(char *str, t_ls_struct *s_info)
 
 	if (s_info->dir == NULL)
 	{
-		s_info->dir = (t_files *) malloc(sizeof(t_files));
+		s_info->dir = (t_files *)malloc(sizeof(t_files));
 		s_info->dir->prev = NULL;
 		s_info->dir->next = NULL;
 		s_info->dir->file = ft_strdup(str);
@@ -80,7 +86,7 @@ void	add_to_not_dir(char *str, t_ls_struct *s_info)
 
 	if (s_info->not_dir == NULL)
 	{
-		s_info->not_dir = (t_files *) malloc(sizeof(t_files));
+		s_info->not_dir = (t_files *)malloc(sizeof(t_files));
 		s_info->not_dir->prev = NULL;
 		s_info->not_dir->next = NULL;
 		s_info->not_dir->file = ft_strdup(str);

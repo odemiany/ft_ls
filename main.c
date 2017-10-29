@@ -63,14 +63,18 @@ int main(int ac, char **av)
 void 	ft_ls(int av, char **ac)
 {
 	t_ls_struct		s_info;
+	char			*fold_name;
 
 	s_info.flags = "\0";
+	fold_name = "\0";
+	fold_name = ft_strjoin(fold_name, "\0");
 	parse_params(av, ac, &s_info);
 	check_flags(&s_info);
-	sort_list(s_info.unsorted, LEXICOGRAPHIC, &(s_info.unsorted));
+	apply_sorting(s_info.flags, s_info.unsorted, &(s_info.unsorted), fold_name);
 	split_dir_and_not_dir(&s_info);
 	operate_not_dir(&s_info);
 	operate_dir(&s_info);
-	while (42);
+	free(fold_name);
+//	while (42);
 	//self_check(&s_info);
 }

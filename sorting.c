@@ -61,19 +61,25 @@ t_files	*lex_min(t_files *start, t_files *finish)
 
 t_files	*time_min(t_files *start, t_files *finish)
 {
-	t_files *min;
+	t_files		*min;
 
 	if (start == NULL || finish == NULL)
 		return (NULL);
 	min = start;
 	while (start != finish)
 	{
-		if (ft_strcmp(min->file, start->file) > 0)
+		if ((start->mtime > min->mtime) ||
+		((start->mtime == min->mtime) && (start->n_mtime > min->n_mtime)) ||
+		((start->mtime == min->mtime) && (start->n_mtime == min->n_mtime) &&
+		(ft_strcmp(min->file, start->file) > 0)))
 			min = start;
 		start = start->next;
 	}
-	if (ft_strcmp(min->file, start->file) > 0)
-		min = start;
+	if ((finish->mtime > min->mtime) ||
+		((finish->mtime == min->mtime) && (finish->n_mtime > min->n_mtime)) ||
+		((finish->mtime == min->mtime) && (finish->n_mtime == min->n_mtime) &&
+		(ft_strcmp(min->file, finish->file) > 0)))
+		min = finish;
 	return (min);
 }
 
@@ -103,13 +109,15 @@ void	reverse_list(t_files *list, t_files **list_ptr)
 
 	if (list == NULL || list_ptr == NULL)
 		return ;
+	while (list->prev != NULL)
+		list = list->prev;
 	list_cp = list;
-		while (list_cp != NULL)
-		{
-			tmp = list_cp->prev;
-			list_cp->prev = list_cp->next;
-			list_cp->next = tmp;
-			list_cp = list_cp->prev;
-		}
+	while (list_cp != NULL)
+	{
+		tmp = list_cp->prev;
+		list_cp->prev = list_cp->next;
+		list_cp->next = tmp;
+		list_cp = list_cp->prev;
+	}
 	ret_ptr_to_head(list, list_ptr);
 }
