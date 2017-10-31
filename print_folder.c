@@ -12,6 +12,14 @@
 
 #include "ft_ls.h"
 
+void	print_folder(t_files *file, t_ls_struct *s_info, char *fold_name)
+{
+	if (ft_strchr(s_info->flags, 'l') == NULL)
+		print_simple_folder(file);
+	else
+		print_extend_folder(file, fold_name);
+}
+
 void	print_simple_folder(t_files *file)
 {
 	if (!file)
@@ -25,77 +33,76 @@ void	print_simple_folder(t_files *file)
 
 void	print_extend_folder(t_files *file, char *fold_name)
 {
-	char *fullname;
+	char		*fullname;
+	t_files		*file_cp;
+	t_stat		file_info;
 
 	if (!file)
 		return ;
+	count_total_blocks(file, fold_name);
+	file_cp = file;
 	while (file != NULL)
 	{
 		fullname = make_next_name(fold_name, file->file);
-		get_file_type_and_perm(file, fullname);
-		get_acl_and_xattr(file, fold_name);
-		ft_putstr(file->perm);
-		ft_putstr(file->file);
-		ft_putendl(" *EXTEND*");
+		lstat(fullname, &file_info);
+		get_file_type_and_perm(file, &file_info);
+		get_acl_and_xattr(file, fullname);
+		file->st_nlink = file_info.st_nlink;
+		file->uid = ft_strdup(getpwuid(file_info.st_uid)->pw_name);
+		file->gid = ft_strdup(getgrgid(file_info.st_gid)->gr_name);
+		get_file_size(file, &file_info);
+		get_last_modified_time(file, &file_info);
+		check_softlink(fullname, file);
 		file = file->next;
 		free(fullname);
 	}
+	print_data(file_cp);
 }
 
-void	get_acl_and_xattr(t_files *file, char *fullname)
+void	print_data(t_files *file)
 {
-	acl_t		acl;
-	acl_entry_t	acl_ent;
-	ssize_t		attr_count;
+	t_len	max_len;
 
-	acl = acl_get_link_np(fullname, ACL_TYPE_EXTENDED);
-	if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &acl_ent) == -1)
+	count_max_len(file, &max_len);
+	while (file != NULL)
 	{
-		acl_free(acl);
-		acl = NULL;
+		ft_putstr(file->perm);
+		print_space(max_len.link - (long long)count_num(file->st_nlink));
+		ft_putnbr(file->st_nlink);
+		write(1, " ", 1);
+		ft_putstr(file->uid);
+		print_space(max_len.uid - ft_strlen(file->uid) + 2);
+		ft_putstr(file->gid);
+		print_space(max_len.gid - ft_strlen(file->gid) + 2);
+		print_size(file, &max_len);
+		ft_putstr(file->last_modified);
+		(file->perm[0] == 'l') ? print_softlink(file) : ft_putendl(file->file);
+		free(file->gid);
+		file = file->next;
 	}
-	attr_count = listxattr(fullname, NULL, 0, XATTR_NOFOLLOW);
-	attr_count = (attr_count < 0) ? 0 : attr_count;
-	if (attr_count > 0)
-		file->perm[10] = '@';
-	else if (acl != NULL)
-		file->perm[10] = '+';
-	else
-		file->perm[10] = ' ';
-	file->perm[11] = '\0';
 }
 
-void	get_file_type_and_perm(t_files *file, char *fullname)
+void	count_max_len(t_files *file, t_len *max_len)
 {
-	t_stat	file_info;
+	size_t tmp_len;
 
-	lstat(fullname, &file_info);
-	file->perm[0] = get_file_type(&file_info);
-	(file_info.st_mode & S_IRUSR) ? file->perm[1] = 'r' : '-';
-	(file_info.st_mode & S_IWUSR) ? file->perm[2] = 'w' : '-';
-	(file_info.st_mode & S_IXUSR) ? file->perm[3] = 'x' : '-';
-	(file_info.st_mode & S_IRGRP) ? file->perm[4] = 'r' : '-';
-	(file_info.st_mode & S_IWGRP) ? file->perm[5] = 'w' : '-';
-	(file_info.st_mode & S_IXGRP) ? file->perm[6] = 'x' : '-';
-	(file_info.st_mode & S_IROTH) ? file->perm[7] = 'r' : '-';
-	(file_info.st_mode & S_IWOTH) ? file->perm[8] = 'w' : '-';
-	(file_info.st_mode & S_IXOTH) ? file->perm[9] = 'x' : '-';
-}
-
-char	get_file_type(t_stat *file_info)
-{
-	if (S_ISBLK(file_info->st_mode) > 0)
-		return ('b');
-	else if (S_ISCHR(file_info->st_mode) > 0)
-		return ('c');
-	else if (S_ISDIR(file_info->st_mode) > 0)
-		return ('d');
-	else if (S_ISFIFO(file_info->st_mode) > 0)
-		return ('p');
-	else if (S_ISLNK(file_info->st_mode) > 0)
-		return ('l');
-	else if (S_ISSOCK(file_info->st_mode) > 0)
-		return ('s');
-	else
-		return ('-');
+	max_len->uid = 0;
+	max_len->gid = 0;
+	max_len->size = 0;
+	max_len->link = 0;
+	while (file != NULL)
+	{
+		max_len->uid = (ft_strlen(file->uid) > max_len->uid) ?
+										ft_strlen(file->uid) : max_len->uid;
+		max_len->gid = (ft_strlen(file->gid) > max_len->gid) ?
+										ft_strlen(file->gid) : max_len->gid;
+		max_len->link = (count_num((long long)file->st_nlink) > max_len->link) ?
+						count_num((long long)file->st_nlink) : max_len->link;
+		if (file->special_files_exists == 1)
+			tmp_len = count_num(file->major) + count_num(file->minor) + 2;
+		else
+			tmp_len = count_num(file->size);
+		max_len->size = (tmp_len > max_len->size) ? tmp_len : max_len->size;
+		file = file->next;
+	}
 }

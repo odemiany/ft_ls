@@ -28,12 +28,7 @@ void	operate_not_dir(t_ls_struct *s_info)
 		if (ft_strchr(s_info->flags, 'l') == NULL)
 			ft_putendl(list->file);
 		else
-		{
-			//get_extend_data(list);
-			//print_extend_data(list);
-			ft_putstr("extend:");
-			ft_putendl(list->file);
-		}
+			get_extend_stuff(list);
 		list = list->next;
 	}
 	free_list(s_info->not_dir);
@@ -41,3 +36,18 @@ void	operate_not_dir(t_ls_struct *s_info)
 	s_info->dir == NULL ? 0 : write(1, "\n", 1);
 }
 
+void	get_extend_stuff(t_files *file)
+{
+	t_stat		file_info;
+
+	lstat(file->file, &file_info);
+	get_file_type_and_perm(file, &file_info);
+	get_acl_and_xattr(file, file->file);
+	file->st_nlink = file_info.st_nlink;
+	file->uid = ft_strdup(getpwuid(file_info.st_uid)->pw_name);
+	file->gid = ft_strdup(getgrgid(file_info.st_gid)->gr_name);
+	get_file_size(file, &file_info);
+	get_last_modified_time(file, &file_info);
+	check_softlink(file->file, file);
+	print_data(file);
+}

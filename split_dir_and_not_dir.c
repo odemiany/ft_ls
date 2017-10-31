@@ -16,7 +16,6 @@ void	split_dir_and_not_dir(t_ls_struct *s_info)
 {
 	t_files			*ptr;
 	int				ret;
-	struct stat		buf;
 
 	s_info->not_dir = NULL;
 	s_info->dir = NULL;
@@ -27,12 +26,7 @@ void	split_dir_and_not_dir(t_ls_struct *s_info)
 		if (ret == 1)
 			add_to_dir(ptr->file, s_info);
 		else if (ret == 0)
-		{
-			if (S_ISLNK(buf.st_mode) != 0 &&
-										ft_strchr(s_info->flags, 'l') == NULL)
-				add_to_dir(ptr->file, s_info);
-			add_to_not_dir(ptr->file, s_info);
-		}
+			check_for_soft_link(ptr->file, s_info);
 		ptr = ptr->next;
 	}
 	sort_input_params(s_info);
@@ -101,16 +95,23 @@ void	add_to_not_dir(char *str, t_ls_struct *s_info)
 	tmp->next->file = ft_strdup(str);
 }
 
-void	sort_input_params(t_ls_struct *s_info)
+void	check_for_soft_link(char *filename, t_ls_struct *s_info)
 {
-	if (ft_strchr(s_info->flags, 't') != NULL)
+	struct stat		buf;
+
+	lstat(filename, &buf);
+	if (S_ISLNK(buf.st_mode) != 0)
 	{
-		sort_list(s_info->dir, BY_TIME, &(s_info->dir));
-		sort_list(s_info->not_dir, BY_TIME, &(s_info->not_dir));
+		if (ft_strchr(s_info->flags, 'l') == NULL)
+		{
+			if (filename[ft_strlen(filename) - 1] == '/')
+				add_to_dir(filename, s_info);
+			else
+				add_to_not_dir(filename, s_info);
+		}
+		else
+			add_to_not_dir(filename, s_info);
 	}
-	if (ft_strchr(s_info->flags, 'r') != NULL)
-	{
-		sort_list(s_info->dir, REVERSE, &(s_info->dir));
-		sort_list(s_info->not_dir, REVERSE, &(s_info->not_dir));
-	}
+	else
+			add_to_not_dir(filename, s_info);
 }

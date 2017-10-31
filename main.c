@@ -75,6 +75,6 @@ void 	ft_ls(int av, char **ac)
 	operate_not_dir(&s_info);
 	operate_dir(&s_info);
 	free(fold_name);
-//	while (42);
+	//while (42);
 	//self_check(&s_info);
 }

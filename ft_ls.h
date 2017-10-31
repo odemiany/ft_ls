@@ -22,6 +22,10 @@
 # include <time.h>
 # include <sys/xattr.h>
 # include <sys/acl.h>
+# include <pwd.h>
+# include <grp.h>
+# include <sys/ioctl.h>
+# include <fcntl.h>
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
@@ -32,13 +36,31 @@
 
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
+
+typedef struct		s_len
+{
+	size_t			link;
+	size_t			uid;
+	size_t			gid;
+	size_t			size;
+}					t_len;
+
 typedef struct		s_files
 {
 	struct s_files	*prev;
 	char			*file;
 	time_t			n_mtime;
 	time_t			mtime;
-	char 			perm[12];
+	char			perm[13];
+	nlink_t			st_nlink;
+	char			*uid;
+	char			*gid;
+	off_t			size;
+	long			major;
+	long			minor;
+	int				special_files_exists;
+	char			last_modified[14];
+	char			*linkpath;
 	struct s_files	*next;
 }					t_files;
 
@@ -93,6 +115,19 @@ char				*make_next_name(char *fold_name, char *file_name);
 void				get_mtime(t_files *list, char *fold_name);
 int					is_dot(char *filename);
 void				get_acl_and_xattr(t_files *file, char *fold_name);
-void				get_file_type_and_perm(t_files *file, char *fold_name);
+void				get_file_type_and_perm(t_files *file, t_stat *file_info);
 char				get_file_type(t_stat *file_info);
+void				check_for_soft_link(char *filename, t_ls_struct *s_info);
+void				permissions_part2(t_files *file, t_stat *file_info);
+void				get_file_size(t_files *file, t_stat *file_info);
+void				get_last_modified_time(t_files *file, t_stat *file_info);
+void				count_total_blocks(t_files *file, char *fold_name);
+void				print_data(t_files *file);
+void				count_max_len(t_files *file, t_len *max_len);
+size_t				count_num(long long int n);
+void				print_space(size_t num);
+void				print_size(t_files *file, t_len *max_len);
+void				print_softlink(t_files *file);
+void				check_softlink(char *fullname, t_files *file);
+void				get_extend_stuff(t_files *file);
 #endif

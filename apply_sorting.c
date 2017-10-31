@@ -12,6 +12,20 @@
 
 #include "ft_ls.h"
 
+void	apply_sorting(char *flags, t_files *file, t_files **file_ptr,
+					  char *fold_name)
+{
+	if (ft_strchr(flags, 't') != NULL)
+	{
+		get_mtime(file, fold_name);
+		sort_list(file, BY_TIME, file_ptr);
+	}
+	else
+		sort_list(file, LEXICOGRAPHIC, file_ptr);
+	if (ft_strchr(flags, 'r') != NULL)
+		sort_list(file, REVERSE, file_ptr);
+}
+
 void	sort_list(t_files *list, int type, t_files **list_ptr)
 {
 	t_files *start;
@@ -100,24 +114,4 @@ void	move_to_end(t_files *min, t_files *unsorted)
 			min->prev = unsorted;
 		}
 	}
-}
-
-void	reverse_list(t_files *list, t_files **list_ptr)
-{
-	t_files *list_cp;
-	t_files *tmp;
-
-	if (list == NULL || list_ptr == NULL)
-		return ;
-	while (list->prev != NULL)
-		list = list->prev;
-	list_cp = list;
-	while (list_cp != NULL)
-	{
-		tmp = list_cp->prev;
-		list_cp->prev = list_cp->next;
-		list_cp->next = tmp;
-		list_cp = list_cp->prev;
-	}
-	ret_ptr_to_head(list, list_ptr);
 }
