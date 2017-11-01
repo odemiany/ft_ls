@@ -6,7 +6,7 @@
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/22 19:05:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/22 19:05:00 by odemiany         ###   ########.fr       */
+/*   Updated: 2017/11/01 04:39:44 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	operate_dir(t_ls_struct *s_info)
 	list = s_info->dir;
 	if (list == NULL)
 		return ;
-	path = "\0";
 	s_info->n_flag = count_flag(s_info->not_dir_exists, count_elem(list));
 	while (list != NULL)
 	{
+		path = "\0";
 		path = ft_strjoin(path, list->file);
 		recursion(path, s_info);
 		((list = list->next) == NULL) ? 0 : write(1, "\n", 1);
@@ -62,7 +62,7 @@ void	recursion(char *fold_name, t_ls_struct *s_info)
 
 void	read_folder(char *folder, t_files **file, char *flags)
 {
-	DIR 		*dir;
+	DIR			*dir;
 	t_dirent	*ent;
 
 	dir = opendir(folder);
@@ -77,7 +77,7 @@ void	read_folder(char *folder, t_files **file, char *flags)
 			continue ;
 		add_to_list(ent->d_name, *file, file);
 	}
-	closedir (dir);
+	closedir(dir);
 }
 
 void	get_mtime(t_files *list, char *fold_name)

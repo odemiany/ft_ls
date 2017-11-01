@@ -6,7 +6,7 @@
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/19 15:17:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/19 15:17:00 by odemiany         ###   ########.fr       */
+/*   Updated: 2017/11/01 05:37:31 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define FLAG 1
 # define NOT_FLAG -1
 # define DELIMITER 2
-# define ALLOWED_FLAGS "alrRt"
+# define ALLOWED_FLAGS "adflrRt"
 # define LEXICOGRAPHIC 0
 # define REVERSE 1
 # define BY_TIME 2

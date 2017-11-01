@@ -6,7 +6,7 @@
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/31 01:41:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/31 01:41:00 by odemiany         ###   ########.fr       */
+/*   Updated: 2017/11/01 04:32:52 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,16 @@ void	print_size(t_files *file, t_len *max_len)
 {
 	if (file->special_files_exists == 1)
 	{
-		ft_putnbr((int) file->major);
+		ft_putnbr((int)file->major);
 		ft_putstr(", ");
 		print_space(max_len->size - count_num(file->major) -
 							count_num(file->minor) - 2);
-		ft_putnbr((int) file->minor);
+		ft_putnbr((int)file->minor);
 	}
 	else
 	{
 		print_space(max_len->size - count_num(file->size));
-		ft_putnbr((int) file->size);
+		ft_putnbr((int)file->size);
 	}
 	write(1, " ", 1);
 }

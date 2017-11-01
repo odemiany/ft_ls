@@ -6,7 +6,7 @@
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/30 18:11:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/30 18:11:00 by odemiany         ###   ########.fr       */
+/*   Updated: 2017/11/01 04:30:56 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	write_fold_name(char *str)
 	call_times++;
 }
 
-char 	*make_next_name(char *fold_name, char *file_name)
+char	*make_next_name(char *fold_name, char *file_name)
 {
 	char	*tmp;
 	char	*ret;
@@ -59,26 +59,4 @@ char 	*make_next_name(char *fold_name, char *file_name)
 	ret = ft_strjoin(ret, file_name);
 	free(tmp);
 	return (ret);
-}
-
-void	ft_put_longnbr(long long int n)
-{
-	long long int n_cp;
-
-	if (n < -9223372036854775800)
-		return ;
-	if (n < 0)
-	{
-		ft_putchar('-');
-		n_cp = -n;
-	}
-	else
-		n_cp = n;
-	if (n_cp < 10)
-	{
-		ft_putchar(n_cp + '0');
-		return;
-	}
-	ft_put_longnbr(n_cp / 10);
-	ft_put_longnbr(n_cp % 10);
 }

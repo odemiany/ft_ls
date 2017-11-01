@@ -6,7 +6,7 @@
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/22 15:39:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/22 15:39:00 by odemiany         ###   ########.fr       */
+/*   Updated: 2017/11/01 04:37:32 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ size_t	count_elem(t_files *list)
 	return (i);
 }
 
-void 	add_to_list(char *str, t_files *file, t_files **file_ptr)
+void	add_to_list(char *str, t_files *file, t_files **file_ptr)
 {
 	if (!str || !file_ptr)
 		return ;
@@ -79,24 +79,4 @@ void 	add_to_list(char *str, t_files *file, t_files **file_ptr)
 	file->next->next = NULL;
 	file->next->prev = file;
 	file->next->file = ft_strdup(str);
-}
-
-void	reverse_list(t_files *list, t_files **list_ptr)
-{
-	t_files *list_cp;
-	t_files *tmp;
-
-	if (list == NULL || list_ptr == NULL)
-		return ;
-	while (list->prev != NULL)
-		list = list->prev;
-	list_cp = list;
-	while (list_cp != NULL)
-	{
-		tmp = list_cp->prev;
-		list_cp->prev = list_cp->next;
-		list_cp->next = tmp;
-		list_cp = list_cp->prev;
-	}
-	ret_ptr_to_head(list, list_ptr);
 }

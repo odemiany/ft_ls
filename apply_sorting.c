@@ -6,15 +6,17 @@
 /*   By: odemiany <odemiany@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/21 13:53:00 by odemiany          #+#    #+#             */
-/*   Updated: 2017/10/21 13:53:00 by odemiany         ###   ########.fr       */
+/*   Updated: 2017/11/01 05:37:07 by odemiany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
 void	apply_sorting(char *flags, t_files *file, t_files **file_ptr,
-					  char *fold_name)
+															char *fold_name)
 {
+	if (ft_strchr(flags, 'f') != NULL)
+		return ;
 	if (ft_strchr(flags, 't') != NULL)
 	{
 		get_mtime(file, fold_name);
